@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>GateHub | Email Signature</title>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen">
+</head>
+	<body>
+		<form id="signature" class="animated">
+			<ul>
+				<li class="animated" style="animation-delay: 0ms;">
+					<img src="https://cdn.gatehub.net/mailing/img/logo-signature.png" width="100" style="margin-bottom: 40px;">
+				</li>
+				<li class="animated" style="animation-delay: 100ms;">
+					<input type="text" id="fullname" name="fullname" placeholder="Full Name" autocomplete="off" required>
+				</li>
+				<li class="animated" style="animation-delay: 200ms;">
+					<input type="text" id="position" name="position" placeholder="Job Position" autocomplete="off" required>
+				</li>
+				<li class="animated" style="animation-delay: 300ms;">
+					<input type="text" id="email" name="email" placeholder="Email Address" autocomplete="off" required>
+				</li>
+				<li class="animated" style="animation-delay: 400ms;">
+					<button>Generate Email Signature</button>
+				</li>
+			</ul>
+		</form>
+
+		<script>
+			document.getElementById("signature").addEventListener("submit", function(event) {
+				event.preventDefault();
+				
+				const fullname = document.getElementById("fullname").value;
+				const position = document.getElementById("position").value;
+				const email = document.getElementById("email").value;
+	
+				localStorage.setItem("fullname", fullname);
+				localStorage.setItem("position", position);
+				localStorage.setItem("email", email);
+	
+				window.location.href = "generate.html";
+			});
+		</script>
+	</body>
+</html>
