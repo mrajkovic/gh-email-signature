@@ -14,21 +14,24 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 	<style>
-		#signature {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
 		}
 
 		button#clipboard {
 			position: fixed;
-			right: 24px;
 			bottom: 24px;
+			left: 50%;
+			margin-left: -85px;
 			padding: 16px 24px;
+			width: 170px;
 			color: #fff;
-			background: #203CF520;
-			color: #203CF5;
+			background: #203CF5;
+			color: #fff;
 			border: 0;
 			font-family: "Outfit", sans-serif;
 			cursor: pointer;
@@ -37,10 +40,41 @@
 			border-radius: 16px;
 			font-weight: 400;
 			font-size: 14px;
+			animation-delay: 200ms;
 		}
 
 		button#clipboard:hover {
 			transform: scale(1.05);
+		}
+
+		.animated {
+			opacity: 0;
+			-webkit-animation: intro-bottom 1s cubic-bezier(0.1,0.7,0.4,1) both;
+			-moz-animation: intro-bottom 1s cubic-bezier(0.1,0.7,0.4,1) both;
+				-ms-animation: intro-bottom 1s cubic-bezier(0.1,0.7,0.4,1) both;
+				-o-animation: intro-bottom 1s cubic-bezier(0.1,0.7,0.4,1) both;
+					animation: intro-bottom 1s cubic-bezier(0.1,0.7,0.4,1) both;
+		}
+
+		@-webkit-keyframes intro-bottom {
+			0% { opacity: 0; -webkit-transform: translate3d(0, 50px, 0); }
+			100% { opacity: 1; -webkit-transform: translate3d(0, 0, 0); }
+		}
+		@-moz-keyframes intro-bottom {
+			0% { opacity: 0; -moz-transform: translate3d(0, 50px, 0); }
+			100% { opacity: 1; -moz-transform: translate3d(0, 0, 0); }
+		}
+		@-ms-keyframes intro-bottom {
+			0% { opacity: 0; -ms-transform: translate3d(0, 50px, 0); }
+			100% { opacity: 1; -ms-transform: translate3d(0, 0, 0); }
+		}
+		@-o-keyframes intro-bottom {
+			0% { opacity: 0; -o-transform: translate3d(0, 50px, 0); }
+			100% { opacity: 1; -o-transform: translate3d(0, 0, 0); }
+		}
+		@keyframes intro-bottom {
+			0% { opacity: 0; transform: translate3d(0, 50px, 0); }
+			100% { opacity: 1; transform: translate3d(0, 0, 0); }
 		}
 	</style>
 	<script>
@@ -64,7 +98,7 @@
 	</script>
 </head>
 	<body>
-		<div id="signature" style="float: left;">
+		<div id="signature" style="float: left;" class="animated">
 		<table width="100%" cellpadding="0" cellspacing="0">
 			<tr>
 				<td>
@@ -121,11 +155,11 @@
 									</tr>
 									<tr>
 										<td valign="top">
+											<a href="https://gatehub.net" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Website&nbsp;&nbsp;&nbsp;</a>
 											<a href="https://linkedin.com/company/gatehub-limited" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">LinkedIn&nbsp;&nbsp;&nbsp;</a>
 											<a href="https://facebook.com/GateHubNet" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Facebook&nbsp;&nbsp;&nbsp;</a>
 											<a href="https://x.com/GateHub" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">X&nbsp;&nbsp;&nbsp;</a>
-											<a href="https://gatehub.net/legal/privacy" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Privacy Policy&nbsp;&nbsp;&nbsp;</a>
-											<a href="https://gatehub.net" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Website</a>
+											<a href="https://gatehub.net/legal/privacy" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Privacy Policy</a>
 										</td>
 									</tr>
 								</table>
@@ -137,12 +171,12 @@
 		</table>
 		</div>
 		<script>
-			// Retrieve data from localStorage
 			document.getElementById("fullname").textContent = localStorage.getItem("fullname") || "Not provided";
 			document.getElementById("position").textContent = " | " + (localStorage.getItem("position") || "Not provided");
 			document.getElementById("email").textContent = localStorage.getItem("email") || "Not provided";
 			document.getElementById("email").href = "mailto:" + localStorage.getItem("email");
+			document.addEventListener("click", copySignature);
 		</script>
 	</body>
 </html>
-<button id="clipboard" onclick="copySignature()">Copy to Clipboard</button>
+<button id="clipboard" class="animated" onclick="copySignature()" style="user-select: none; -webkit-user-select: none; -ms-user-select: none;">Copy to Clipboard</button>
