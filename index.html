@@ -32,17 +32,11 @@
 		</form>
 
 		<script>
-			document.getElementById("signature").addEventListener("submit", function(event) {
+			document.getElementById("signature").addEventListener("submit", (event) => {
 				event.preventDefault();
-				
-				const fullname = document.getElementById("fullname").value;
-				const position = document.getElementById("position").value;
-				const email = document.getElementById("email").value;
-	
-				localStorage.setItem("fullname", fullname);
-				localStorage.setItem("position", position);
-				localStorage.setItem("email", email);
-	
+				["fullname", "position", "email"].forEach(id => 
+					localStorage.setItem(id, document.getElementById(id).value)
+				);
 				window.location.href = "generate.html";
 			});
 		</script>
