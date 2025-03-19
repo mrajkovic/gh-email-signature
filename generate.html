@@ -4,6 +4,9 @@
 <head>
 	<title>GateHub | Email Signature</title>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 	<style>
 		#signature {
 			position: absolute;
@@ -11,7 +14,48 @@
 			top: 50%;
 			transform: translate(-50%, -50%);
 		}
+
+		button#clipboard {
+			position: fixed;
+			right: 24px;
+			bottom: 24px;
+			padding: 16px 24px;
+			color: #fff;
+			background: #203CF520;
+			color: #203CF5;
+			border: 0;
+			font-family: "Outfit", sans-serif;
+			cursor: pointer;
+			margin-top: 15px;
+			transition: all 400ms;
+			border-radius: 16px;
+			font-weight: 400;
+			font-size: 14px;
+		}
+
+		button#clipboard:hover {
+			transform: scale(1.05);
+		}
 	</style>
+	<script>
+		function copySignature() {
+			const signature = document.getElementById("signature");
+
+			const range = document.createRange();
+			range.selectNode(signature);
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+
+			try {
+				document.execCommand("copy");
+				alert("Email signature successfully copied to the clipboard! 🎉\nSimply paste it into your email client to start using it.");
+			} catch (err) {
+				console.error("Something went wrong. Please try again.");
+			}
+
+			window.getSelection().removeAllRanges();
+		}
+	</script>
 </head>
 	<body>
 		<div id="signature" style="float: left;">
@@ -95,3 +139,4 @@
 		</script>
 	</body>
 </html>
+<button id="clipboard" onclick="copySignature()">Copy to Clipboard</button>
