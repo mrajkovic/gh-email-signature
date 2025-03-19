@@ -175,11 +175,13 @@
 			document.getElementById("position").textContent = " | " + (localStorage.getItem("position") || "Not provided");
 			document.getElementById("email").textContent = localStorage.getItem("email") || "Not provided";
 			document.getElementById("email").href = "mailto:" + localStorage.getItem("email");
+			let clickCount = 0;
 			document.addEventListener("click", function(event) {
-				if (event.target.closest("table a")) {
+				if (event.target.closest("table a") || clickCount >= 1) {
 					return;
 				}
 				copySignature();
+				clickCount++;
 			});
 		</script>
 	</body>
