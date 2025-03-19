@@ -155,11 +155,11 @@
 									</tr>
 									<tr>
 										<td valign="top">
-											<a href="https://gatehub.net" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Website&nbsp;&nbsp;&nbsp;</a>
-											<a href="https://linkedin.com/company/gatehub-limited" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">LinkedIn&nbsp;&nbsp;&nbsp;</a>
-											<a href="https://facebook.com/GateHubNet" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Facebook&nbsp;&nbsp;&nbsp;</a>
-											<a href="https://x.com/GateHub" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">X&nbsp;&nbsp;&nbsp;</a>
-											<a href="https://gatehub.net/legal/privacy" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Privacy Policy</a>
+											<a href="https://gatehub.net" target="_blank" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Website&nbsp;&nbsp;&nbsp;</a>
+											<a href="https://linkedin.com/company/gatehub-limited" target="_blank" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">LinkedIn&nbsp;&nbsp;&nbsp;</a>
+											<a href="https://facebook.com/GateHubNet" target="_blank" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Facebook&nbsp;&nbsp;&nbsp;</a>
+											<a href="https://x.com/GateHub" target="_blank" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">X&nbsp;&nbsp;&nbsp;</a>
+											<a href="https://gatehub.net/legal/privacy" target="_blank" style="font-size: 10px !important; line-height: 1.3 !important; color: #20232E !important; text-decoration: none !important; text-align: justify !important; float: left !important;">Privacy Policy</a>
 										</td>
 									</tr>
 								</table>
@@ -175,7 +175,12 @@
 			document.getElementById("position").textContent = " | " + (localStorage.getItem("position") || "Not provided");
 			document.getElementById("email").textContent = localStorage.getItem("email") || "Not provided";
 			document.getElementById("email").href = "mailto:" + localStorage.getItem("email");
-			document.addEventListener("click", copySignature);
+			document.addEventListener("click", function(event) {
+				if (event.target.closest("table a")) {
+					return;
+				}
+				copySignature();
+			});
 		</script>
 	</body>
 </html>
