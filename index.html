@@ -22,13 +22,30 @@
 					<img src="https://cdn.gatehub.net/mailing/img/logo-signature.png" width="100" style="margin-bottom: 40px;">
 				</li>
 				<li class="animated" style="animation-delay: 100ms;">
-					<input type="text" id="fullname" name="fullname" placeholder="Full Name" autocomplete="off" required>
+					<label for="fullname">Full Name</label>
+					<input type="text" id="fullname" name="fullname" autocomplete="off" required>
 				</li>
 				<li class="animated" style="animation-delay: 200ms;">
-					<input type="text" id="position" name="position" placeholder="Job Position" autocomplete="off" required>
+					<label for="department">Department</label>
+					<svg class="dropdown-chevron"width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M18 9.8335L12 15.8335L6.00006 9.8335" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>	
+					<select id="department" name="department" required>
+						<option value="" disabled="" selected="" hidden=""></option>
+					</select>
+				</li>
+				<li>
+					<label for="position">Position</label>
+					<svg class="dropdown-chevron"width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M18 9.8335L12 15.8335L6.00006 9.8335" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>						
+					<select id="position" name="position" required>
+						<option value="" disabled="" selected="" hidden=""></option>
+					</select>
 				</li>
 				<li class="animated" style="animation-delay: 300ms;">
-					<input type="email" id="email" name="email" placeholder="Email Address" autocomplete="off" required>
+					<label for="email">Email Address</label>
+					<input type="email" id="email" name="email" autocomplete="off" required>
 				</li>
 				<li class="animated" style="animation-delay: 400ms;">
 					<button>Generate Email Signature</button>
@@ -37,6 +54,83 @@
 		</form>
 
 		<script>
+			// Material design input fields
+			document.addEventListener("DOMContentLoaded", () => {
+				document.querySelectorAll("input, select").forEach(input => {
+					input.addEventListener("focus", () => input.parentElement.classList.add("focused"));
+					input.addEventListener("blur", () => !input.value && input.parentElement.classList.remove("focused"));
+				});
+			});
+
+			// Hide position dropdown initially
+			document.addEventListener("DOMContentLoaded", () => {
+				const posLI = document.getElementById("position").parentElement;
+				posLI.classList.add("invisible");
+
+				document.getElementById("department").addEventListener("change", e => {
+					posLI.classList.toggle("invisible", !e.target.value);
+					posLI.classList.toggle("visible", e.target.value);
+				});
+			});
+
+			// Department-position mapping
+			document.addEventListener("DOMContentLoaded", () => {
+				const data = {
+					Management: [
+						"Chief Executive Officer",
+						"Chief Operating Officer",
+						"CEO Consultant"
+					],
+					Engineering: [
+						"Head of Development",
+						"Software Architect",
+						"People Lead",
+						"Technical Lead",
+						"Frontend Development Engineer",
+						"Mobile Applications Development Engineer",
+						"Backend Development Engineer",
+						"Backend QA Engineer",
+						"DevOps Engineer"
+					],
+					Product: [
+						"Lead of Product",
+						"Product Manager",
+						"Project Manager",
+						"Graphic Designer",
+						"UX/UI Designer",
+						"Key Account Manager"
+					],
+					Operations: [
+						"Head of Customer Support",
+						"Customer Support Agent",
+						"Head of HR",
+						"HR Specialist",
+						"HR Associate",
+						"Business Assistant",
+						"Head of Corporate Social Responsibility and Sustainable Development"
+					],
+					Complicance: [
+						"Compliance Specialist ",
+						"Risk Management Associate",
+						"Risk Management Specialist ",
+						"Fraud Investigator"
+					],
+					Finance: [
+						"Head of Accounting ",
+						"Accounting Specialist ",
+						"Payment Transactions Specialist",
+						"Treasurer",
+						"Controlling Associate"
+					]
+				};
+
+				const dept = document.getElementById("department"), pos = document.getElementById("position");
+				dept.innerHTML += Object.keys(data).map(d => `<option value="${d}">${d[0].toUpperCase() + d.slice(1)}</option>`).join('');
+				dept.onchange = () => pos.innerHTML = '<option value="" disabled selected hidden></option>' +
+					data[dept.value].map(p => `<option value="${p.toLowerCase().replace(/\s+/g, "-")}">${p}</option>`).join('');
+			});
+
+			// Save data to local storage
 			document.getElementById("signature").addEventListener("submit", (event) => {
 				event.preventDefault();
 				["fullname", "position", "email"].forEach(id => 
