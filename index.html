@@ -34,12 +34,21 @@
 						<option value="" disabled="" selected="" hidden=""></option>
 					</select>
 				</li>
-				<li>
+				<li class="invisible">
 					<label for="position">Position</label>
 					<svg class="dropdown-chevron"width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M18 9.8335L12 15.8335L6.00006 9.8335" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
 					</svg>						
 					<select id="position" name="position" required>
+						<option value="" disabled="" selected="" hidden=""></option>
+					</select>
+				</li>
+				<li class="invisible">
+					<label for="level">Level</label>
+					<svg class="dropdown-chevron"width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M18 9.8335L12 15.8335L6.00006 9.8335" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>						
+					<select id="level" name="level">
 						<option value="" disabled="" selected="" hidden=""></option>
 					</select>
 				</li>
@@ -58,89 +67,107 @@
 			document.addEventListener("DOMContentLoaded", () => {
 				document.querySelectorAll("input, select").forEach(input => {
 					input.addEventListener("focus", () => input.parentElement.classList.add("focused"));
-					input.addEventListener("blur", () => !input.value && input.parentElement.classList.remove("focused"));
+
+					input.addEventListener("blur", () => {
+					if (!input.value) input.parentElement.classList.remove("focused");
+					});
+				});
+
+				const observer = new MutationObserver(() => {
+					document.querySelectorAll('li.invisible.focused').forEach(li => {
+					li.classList.remove('focused');
+					});
+				});
+
+				document.querySelectorAll('li').forEach(li => {
+					observer.observe(li, { attributes: true, attributeFilter: ['class'] });
 				});
 			});
 
-			// Hide position dropdown initially
-			document.addEventListener("DOMContentLoaded", () => {
-				const posLI = document.getElementById("position").parentElement;
-				posLI.classList.add("invisible");
-
-				document.getElementById("department").addEventListener("change", e => {
-					posLI.classList.toggle("invisible", !e.target.value);
-					posLI.classList.toggle("visible", e.target.value);
-				});
-			});
 
 			// Department-position mapping
 			document.addEventListener("DOMContentLoaded", () => {
 				const data = {
-					Management: [
-						"Chief Executive Officer",
-						"Chief Operating Officer",
-						"CEO Consultant"
-					],
-					Engineering: [
-						"Head of Development",
-						"Software Architect",
-						"People Lead",
-						"Technical Lead",
-						"Frontend Development Engineer",
-						"Mobile Applications Development Engineer",
-						"Backend Development Engineer",
-						"Backend QA Engineer",
-						"DevOps Engineer"
-					],
-					Product: [
-						"Lead of Product",
-						"Product Manager",
-						"Project Manager",
-						"Graphic Designer",
-						"UX/UI Designer",
-						"Key Account Manager"
-					],
-					Operations: [
-						"Head of Customer Support",
-						"Customer Support Agent",
-						"Head of HR",
-						"HR Specialist",
-						"HR Associate",
-						"Business Assistant",
-						"Head of Corporate Social Responsibility and Sustainable Development"
-					],
-					Complicance: [
-						"Compliance Specialist ",
-						"Risk Management Associate",
-						"Risk Management Specialist ",
-						"Fraud Investigator"
-					],
-					Finance: [
-						"Head of Accounting ",
-						"Accounting Specialist ",
-						"Payment Transactions Specialist",
-						"Treasurer",
-						"Controlling Associate"
-					]
+					Management: { "Chief Executive Officer": [null], "CEO Consultant": [null] },
+					Engineering: {
+						"Chief Technology Officer (CTO)": [null],
+						"Head of Engineering": [null],
+						"Software Architect": [null],
+						"People Lead": [null],
+						"Technical Lead": [null],
+						"Frontend Engineer": ["Junior", "Intermediate", "Senior"],
+						"Mobile App Engineer": [null],
+						"Backend Engineer": ["Junior", "Intermediate", "Senior"],
+						"QA Backend Engineer": ["Junior", "Intermediate", "Senior"],
+						"DevOps Engineer": ["Intermediate", "Senior"]
+					},
+					Product: {
+						"Chief Product Officer (CPO)": [null],
+						"Head of Product": [null],
+						"Product Manager": ["Junior", "Intermediate", "Senior"],
+						"Project Manager": ["Junior", "Intermediate", "Senior"],
+						"Graphic Designer": ["Senior"],
+						"UX/UI Designer": ["Junior", "Intermediate", "Senior"],
+						"Key Account Manager": [null]
+					},
+					Operations: { "Chief Operating Officer (COO)": [null] },
+					Compliance: { "Chief Compliance Officer (CCO)": [null] },
+					Finance: { "Chief Financial Officer (CFO)": [null] }
 				};
 
-				const dept = document.getElementById("department"), pos = document.getElementById("position");
-				// Add options for the department dropdown
-				dept.innerHTML += Object.keys(data).map(d => `<option value="${d}">${d[0].toUpperCase() + d.slice(1)}</option>`).join('');
+				const dept = document.getElementById("department");
+				const pos = document.getElementById("position");
+				const level = document.getElementById("level");
 
-				dept.onchange = () => {
-					// Populate the position dropdown with original text as value
-					pos.innerHTML = '<option value="" disabled selected hidden></option>' +
-						data[dept.value].map(p => `<option value="${p}">${p}</option>`).join('');
-				};
+				const posWrapper = pos.closest("li");
+				const levelWrapper = level.closest("li");
+
+				posWrapper.classList.add("invisible");
+				levelWrapper.classList.add("invisible");
+
+				Object.keys(data).forEach(department => {
+					dept.innerHTML += `<option value="${department}">${department}</option>`;
+				});
+
+				dept.addEventListener("change", () => {
+					pos.innerHTML = '<option value="" disabled selected hidden></option>';
+					level.innerHTML = '<option value="" disabled selected hidden></option>';
+					levelWrapper.classList.replace("visible", "invisible");
+
+					Object.keys(data[dept.value]).forEach(position => {
+						pos.innerHTML += `<option value="${position}">${position}</option>`;
+					});
+
+					posWrapper.classList.replace("invisible", "visible");
+				});
+
+				pos.addEventListener("change", () => {
+					const levels = data[dept.value][pos.value];
+					level.innerHTML = '<option value="" disabled selected hidden></option>';
+
+					if (levels[0] === null) {
+						levelWrapper.classList.replace("visible", "invisible");
+					} else {
+						levels.forEach(lvl => {
+							level.innerHTML += `<option value="${lvl}">${lvl}</option>`;
+						});
+						levelWrapper.classList.replace("invisible", "visible");
+					}
+				});
 			});
 
 			// Save data to local storage
 			document.getElementById("signature").addEventListener("submit", (event) => {
 				event.preventDefault();
-				["fullname", "position", "email"].forEach(id => 
+
+				const level = document.getElementById("level").value;
+				const position = document.getElementById("position").value;
+				const jobTitle = level ? `${level} ${position}` : position;
+
+				["fullname", "email"].forEach(id =>
 					localStorage.setItem(id, document.getElementById(id).value)
 				);
+				localStorage.setItem("position", jobTitle);
 				window.location.href = "generate.html";
 			});
 		</script>
